@@ -196,43 +196,5 @@ module.exports = {
         `gatsby-plugin-react-helmet`,
         `gatsby-plugin-force-trailing-slashes`,
         `gatsby-plugin-offline`,
-        {
-            resolve: `gatsby-theme-try-ghost`,
-            options: {
-                siteConfig: {
-                    siteUrl: `http://localhost:8000`,
-                    postsPerPage: 3,
-                    siteTitleMeta: `Gatsby frontend powered by headless Ghost CMS`,
-                    siteDescriptionMeta: `Turn your Ghost blog into a flaring fast static site with Gatsby`,
-                    shortTitle: `Ghost`,
-                    siteIcon: `favicon.png`,
-                    backgroundColor: `#e9e9e9`,
-                    themeColor: `#15171A`,
-                    gatsbyImages: true,
-                    // Overwrite navigation menu (default: []), label is case sensitive
-                    // overwriteGhostNavigation: [{ label: `Home`, url: `/` }],
-                },
-                ghostConfig: {
-                    development: {
-                        apiUrl: `http://54.188.192.197`,
-                        contentApiKey: `07c8488efad5d1cda45423d822`,
-                    },
-                    production: {
-                        apiUrl: `http://54.188.192.197`,
-                        contentApiKey: `07c8488efad5d1cda45423d822`,
-                    },
-                },
-                //routes: {
-                //    // Root url for Ghost posts and pages (optional, defaults to `/`)
-                //    basePath: `/blog`,
-                //
-                //    // Collections (optional , default: [])
-                //    collections: [{
-                //        path: `speeches`,
-                //        selector: node => node.primary_tag && node.primary_tag.slug === `speeches`,
-                //    }],
-                //},
-            },
-        },
     ],
 };
