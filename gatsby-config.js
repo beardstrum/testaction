@@ -1,38 +1,49 @@
-const path = require(`path`)
+const path = require(`path`);
 
-const config = require(`./src/utils/siteConfig`)
-const generateRSSFeed = require(`./src/utils/rss/generate-feed`)
+const config = require(`./src/utils/siteConfig`);
+const generateRSSFeed = require(`./src/utils/rss/generate-feed`);
 
-let ghostConfig
+let ghostConfig;
 
 try {
-    ghostConfig = require(`./.ghost`)
+    ghostConfig = require(`./.ghost`);
 } catch (e) {
     ghostConfig = {
         production: {
             apiUrl: process.env.GHOST_API_URL,
             contentApiKey: process.env.GHOST_CONTENT_API_KEY,
         },
-    }
+    };
 } finally {
-    const { apiUrl, contentApiKey } = process.env.NODE_ENV === `development` ? ghostConfig.development : ghostConfig.production
+    const { apiUrl, contentApiKey } =
+        process.env.NODE_ENV === `development`
+            ? ghostConfig.development
+            : ghostConfig.production;
 
     if (!apiUrl || !contentApiKey || contentApiKey.match(/<key>/)) {
-        throw new Error(`GHOST_API_URL and GHOST_CONTENT_API_KEY are required to build. Check the README.`) // eslint-disable-line
+        throw new Error(
+            `GHOST_API_URL and GHOST_CONTENT_API_KEY are required to build. Check the README.`
+        ); // eslint-disable-line
     }
 }
 
-if (process.env.NODE_ENV === `production` && config.siteUrl === `http://localhost:8000` && !process.env.SITEURL) {
-    throw new Error(`siteUrl can't be localhost and needs to be configured in siteConfig. Check the README.`) // eslint-disable-line
+if (
+    process.env.NODE_ENV === `production` &&
+    config.siteUrl === `http://localhost:8000` &&
+    !process.env.SITEURL
+) {
+    throw new Error(
+        `siteUrl can't be localhost and needs to be configured in siteConfig. Check the README.`
+    ); // eslint-disable-line
 }
 
 /**
-* This is the place where you can tell Gatsby which plugins to use
-* and set them up the way you want.
-*
-* Further info 👉🏼 https://www.gatsbyjs.org/docs/gatsby-config/
-*
-*/
+ * This is the place where you can tell Gatsby which plugins to use
+ * and set them up the way you want.
+ *
+ * Further info 👉🏼 https://www.gatsbyjs.org/docs/gatsby-config/
+ *
+ */
 module.exports = {
     siteMetadata: {
         siteUrl: process.env.SITEURL || config.siteUrl,
@@ -108,9 +119,7 @@ module.exports = {
                     }
                 }
               `,
-                feeds: [
-                    generateRSSFeed(config),
-                ],
+                feeds: [generateRSSFeed(config)],
             },
         },
         {
@@ -187,5 +196,43 @@ module.exports = {
         `gatsby-plugin-react-helmet`,
         `gatsby-plugin-force-trailing-slashes`,
         `gatsby-plugin-offline`,
+        {
+            resolve: `gatsby-theme-try-ghost`,
+            options: {
+                siteConfig: {
+                    siteUrl: `http://localhost:8000`,
+                    postsPerPage: 3,
+                    siteTitleMeta: `Gatsby frontend powered by headless Ghost CMS`,
+                    siteDescriptionMeta: `Turn your Ghost blog into a flaring fast static site with Gatsby`,
+                    shortTitle: `Ghost`,
+                    siteIcon: `favicon.png`,
+                    backgroundColor: `#e9e9e9`,
+                    themeColor: `#15171A`,
+                    gatsbyImages: true,
+                    // Overwrite navigation menu (default: []), label is case sensitive
+                    // overwriteGhostNavigation: [{ label: `Home`, url: `/` }],
+                },
+                ghostConfig: {
+                    development: {
+                        apiUrl: `http://54.188.192.197`,
+                        contentApiKey: `07c8488efad5d1cda45423d822`,
+                    },
+                    production: {
+                        apiUrl: `http://54.188.192.197`,
+                        contentApiKey: `07c8488efad5d1cda45423d822`,
+                    },
+                },
+                //routes: {
+                //    // Root url for Ghost posts and pages (optional, defaults to `/`)
+                //    basePath: `/blog`,
+                //
+                //    // Collections (optional , default: [])
+                //    collections: [{
+                //        path: `speeches`,
+                //        selector: node => node.primary_tag && node.primary_tag.slug === `speeches`,
+                //    }],
+                //},
+            },
+        },
     ],
-}
+};
